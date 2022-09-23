@@ -14,7 +14,8 @@ export type blogsType = {
     name: string,
     youtubeUrl: string
 }[]
-let blogs: blogsType = []
+
+export let blogs: blogsType = []
 
 blogsRouter.post('/',
     authenticationGuardMiddleware,
