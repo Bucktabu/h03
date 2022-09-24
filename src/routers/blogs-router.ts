@@ -18,11 +18,19 @@ blogsRouter.post('/',
 blogsRouter.get('/', (req: Request, res: Response) => {
     const blogs = blogsRepository.giveAllBlog()
 
+    if (!blogs) {
+        return res.sendStatus(404)
+    }
+
     res.status(200).send(blogs)
 })
 
 blogsRouter.get('/:id', (req: Request, res: Response) => {
     const blog = blogsRepository.giveBlogById(req.params.id)
+
+    if (!blog) {
+        return res.sendStatus(404)
+    }
 
     res.status(200).send(blog)
 })
