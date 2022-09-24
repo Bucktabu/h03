@@ -41,22 +41,22 @@ export const blogsRepository = {
     },
 
     deleteBlogById(id: string) {
-        for (let i = 0, l = blogs.length; i < l; i++) {
-            if (blogs[i].id === id) {
-                blogs.slice(i, 1)
-                return true
-            }
-        }
-        return false
-
-        // let blog = blogsRepository.giveBlogById(id)
-        //
-        // if (blog) {
-        //     blogs = blogs.filter(b => b.id === id)
-        //     return true
+        // for (let i = 0, l = blogs.length; i < l; i++) {
+        //     if (blogs[i].id === id) {
+        //         blogs.slice(i, 1)
+        //         return true
+        //     }
         // }
-        //
         // return false
+
+        let blog = blogsRepository.giveBlogById(id)
+
+        if (blog) {
+            blogs = blogs.filter(b => b.id !== id)
+            return true
+        }
+
+        return false
     },
 
     deleteAllBlogs() {
