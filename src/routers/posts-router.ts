@@ -10,19 +10,16 @@ export const postsRouter = Router({})
 const titleValidation = body('title').isString().trim().isLength({min: 5, max: 30})
 const shortDescriptionValidation = body('shortDescription').isString().trim().isLength({min: 5, max: 100})
 const contentValidation = body('content').isString().trim().isLength(({min: 5, max: 1000}))
-const blogIdValidation = body('blogId').isString().custom(blogExists)
-//     async (id: string) => {
-//     const blog = await blogs.find((blog) => {
-//         return blog.id === id
-//     } );
-//     console.log('validation middleware blog = ', blog)
-//     console.log('validation middleware id = ', id)
-//     if (!blog) {
-//         throw new Error('blog not found')
-//     }
-//
-//     return true
-// })
+const blogIdValidation = body('blogId').isString()
+    .custom(async (id: string) => {
+    const blog = await blogs.find(blog => blog.id === id)
+
+    if (!blog) {
+        throw new Error('blog not found')
+    }
+
+    return true
+})
 
 const postRoutValidation = [titleValidation, shortDescriptionValidation, contentValidation, blogIdValidation, inputValidationMiddleware]
 
