@@ -2,13 +2,10 @@ import {Request, Response, Router} from "express";
 import {body} from "express-validator";
 import {inputValidationMiddleware} from "../middlewares/input-validation-middleware";
 import {authenticationGuardMiddleware} from "../middlewares/authentication-guard-middleware";
+import {blogRouterValidation} from "../middlewares/blogRouter-validation-middleware";
 
 
 export const blogsRouter = Router({})
-
-const nameValidation = body('name').isString().trim().isLength({min: 3, max: 15})
-const youtubeUrlValidation = body('youtubeUrl').isString().trim().isURL().isLength({min: 5, max: 100})
-const postRoutValidation = [nameValidation, youtubeUrlValidation, inputValidationMiddleware]
 
 export type blogsType = {
     id: string,
@@ -20,7 +17,7 @@ export let blogs: blogsType = []
 
 blogsRouter.post('/',
     authenticationGuardMiddleware,
-    ...postRoutValidation,
+    ...blogRouterValidation,
     (req: Request, res: Response) => {
         const newBlog = {
             id: String(+(new Date())),
@@ -50,7 +47,7 @@ blogsRouter.get('/:id', (req: Request, res: Response) => {
 
 blogsRouter.put('/:id',
     authenticationGuardMiddleware,
-    ...postRoutValidation,
+    ...blogRouterValidation,
     (req: Request, res: Response) => {
         const blog = blogs.find(b => +b.id === +req.params.id)
 

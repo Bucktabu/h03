@@ -1,17 +1,8 @@
 import {Request, Response, Router} from "express";
-import {body} from 'express-validator'
-import {inputValidationMiddleware} from "../middlewares/input-validation-middleware";
 import {authenticationGuardMiddleware} from "../middlewares/authentication-guard-middleware";
-import {blogIdValidation} from "../middlewares/blogExists-middleware";
-import {blogs} from "./blogs-router";
+import {postRouterValidation} from "../middlewares/postRouter-validation-middleware";
 
 export const postsRouter = Router({})
-
-const titleValidation = body('title').isString().trim().isLength({min: 5, max: 30})
-const shortDescriptionValidation = body('shortDescription').isString().trim().isLength({min: 5, max: 100})
-const contentValidation = body('content').isString().trim().isLength(({min: 5, max: 1000}))
-
-const postRoutValidation = [titleValidation, shortDescriptionValidation, contentValidation, blogIdValidation, inputValidationMiddleware]
 
 export type postsType = {
     id: string,
@@ -25,7 +16,7 @@ let posts: postsType = []
 
 postsRouter.post('/',
     authenticationGuardMiddleware,
-    ...postRoutValidation,
+    ...postRouterValidation,
     (req: Request, res: Response) => {
         const newPost = {
             id: String(+(new Date())),
@@ -57,7 +48,7 @@ postsRouter.get('/:id', (req: Request, res: Response) => {
 
 postsRouter.put('/:id',
     authenticationGuardMiddleware,
-    ...postRoutValidation,
+    ...postRouterValidation,
     (req: Request, res: Response) => {
         const post = posts.find(p => +p.id === +req.params.id)
         if (!post) {
