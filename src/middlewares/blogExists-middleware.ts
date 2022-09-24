@@ -1,12 +1,11 @@
-import {CustomValidator} from "express-validator";
-import {postsType} from "../routers/posts-router";
+import {blogs} from "../routers/blogs-router";
 
-let posts: postsType
+export const blogExists = (id: string) => {
+    const blog = blogs.find(blog => blog.id === id)
 
-export const blogExists: CustomValidator = (value) => {
-    const currentBlog = posts.find(el => el.blogId === value)
-
-    if (!currentBlog) {
+    if (blog) {
         throw new Error('Blog doesn`t exist')
     }
+
+    return true
 }

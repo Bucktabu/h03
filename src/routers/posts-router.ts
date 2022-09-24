@@ -10,20 +10,21 @@ export const postsRouter = Router({})
 const titleValidation = body('title').isString().trim().isLength({min: 5, max: 30})
 const shortDescriptionValidation = body('shortDescription').isString().trim().isLength({min: 5, max: 100})
 const contentValidation = body('content').isString().trim().isLength(({min: 5, max: 1000}))
-const blogIdValidation = body('blogId').isString().custom(async (id: string) => {
-    const blog = await blogs.find((blog) => {
-        return blog.id === id
-    } );
-    console.log('validation middleware blog = ', blog)
-    console.log('validation middleware id = ', id)
-    if (!blog) {
-        throw new Error('blog not found')
-    }
+const blogIdValidation = body('blogId').isString().custom(blogExists)
+//     async (id: string) => {
+//     const blog = await blogs.find((blog) => {
+//         return blog.id === id
+//     } );
+//     console.log('validation middleware blog = ', blog)
+//     console.log('validation middleware id = ', id)
+//     if (!blog) {
+//         throw new Error('blog not found')
+//     }
+//
+//     return true
+// })
 
-    return true
-})
-
-const postRoutValidation = [titleValidation, shortDescriptionValidation, contentValidation, blogIdValidation]
+const postRoutValidation = [titleValidation, shortDescriptionValidation, contentValidation, blogIdValidation, inputValidationMiddleware]
 
 export type postsType = {
     id: string,
@@ -38,7 +39,6 @@ let posts: postsType = []
 postsRouter.post('/',
     authenticationGuardMiddleware,
     ...postRoutValidation,
-    inputValidationMiddleware,
     (req: Request, res: Response) => {
         const newPost = {
             id: String(+(new Date())),
@@ -70,11 +70,7 @@ postsRouter.get('/:id', (req: Request, res: Response) => {
 
 postsRouter.put('/:id',
     authenticationGuardMiddleware,
-    titleValidation,
-    shortDescriptionValidation,
-    contentValidation,
-    blogIdValidation,
-    inputValidationMiddleware,
+    ...postRoutValidation,
     (req: Request, res: Response) => {
         const post = posts.find(p => +p.id === +req.params.id)
         if (!post) {
