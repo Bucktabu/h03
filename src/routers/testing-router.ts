@@ -1,18 +1,17 @@
 import {Request, Response, Router} from "express";
 import {postsType} from "./posts-router";
-import {blogsType} from "./blogs-router";
+import {blogsRepository} from "../repositories/blogs-repository";
 
 export const testingRouter = Router({})
 
 let posts: postsType
-let blogs: blogsType
 
 testingRouter.delete('/all-data', (req: Request, res: Response) => {
 
     posts = []
-    blogs = []
+    const blogsDeleted = blogsRepository.deleteAllBlogs()
 
-    if (!posts.length && !blogs.length) {
+    if (!posts.length && blogsDeleted === true) {
         res.sendStatus(204)
     }
 })

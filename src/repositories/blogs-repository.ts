@@ -49,5 +49,11 @@ export const blogsRepository = {
         }
 
         return false
+    },
+
+    deleteAllBlogs() {
+        blogs = []
+
+        return true
     }
 }
