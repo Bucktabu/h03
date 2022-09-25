@@ -34,7 +34,7 @@ export const postsRepository = {
     },
 
     updatePost(id: string, title: string, shortDescription: string, content: string, blogId: string) {
-        const post = postsRepository.givePostById(id)
+        let post = postsRepository.givePostById(id)
 
         if (!post) {
             return false
