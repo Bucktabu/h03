@@ -31,7 +31,7 @@ postsRouter.put('/:id',
     authenticationGuardMiddleware,
     ...postRouterValidation,
     (req: Request, res: Response) => {
-        const isUpdate = postsRepository.updatePost(req.params.id, req.params.title, req.params.shortDescription, req.params.content, req.params.blogId)
+        const isUpdate = postsRepository.updatePost(req.params.id, req.body.title, req.body.shortDescription, req.body.content, req.body.blogId)
 
         if (!isUpdate) {
             return res.sendStatus(404)
