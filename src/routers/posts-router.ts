@@ -31,13 +31,13 @@ postsRouter.put('/:id',
     authenticationGuardMiddleware,
     ...postRouterValidation,
     (req: Request, res: Response) => {
-        const isUpdate = postsRepository.updatePost(req.body.id, req.body.title, req.body.shortDescription, req.body.content, req.body.blogId)
+        const isUpdate = postsRepository.updatePost(req.params.id, req.params.title, req.params.shortDescription, req.params.content, req.params.blogId)
 
         if (!isUpdate) {
             return res.sendStatus(404)
         }
 
-        const post = postsRepository.givePostById(req.body.id)
+        const post = postsRepository.givePostById(req.params.id)
         res.status(204).send(post)
     }
 )
@@ -45,7 +45,7 @@ postsRouter.put('/:id',
 postsRouter.delete('/:id',
     authenticationGuardMiddleware,
     (req: Request, res: Response) => {
-        const isDeleted = postsRepository.deletePostById(req.body.id)
+        const isDeleted = postsRepository.deletePostById(req.params.id)
 
         !isDeleted ? res.sendStatus(404) : res.sendStatus(204)
     }
