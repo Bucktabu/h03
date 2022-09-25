@@ -38,6 +38,12 @@ export const blogsRepository = {
         blog.youtubeUrl = youtubeUrl
 
         return true
+
+        // !blog ? false : (
+        //     blog.name = name,
+        //     blog.youtubeUrl = youtubeUrl,
+        //     true
+        // )
     },
 
     deleteBlogById(id: string) {
@@ -49,6 +55,11 @@ export const blogsRepository = {
 
         blogs = blogs.filter(b => b.id !== id)
         return true
+
+        // !blog ? false : (
+        //     blogs = blogs.filter(b => b.id !== id),
+        //     true
+        // )
     },
 
     deleteAllBlogs() {

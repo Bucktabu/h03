@@ -11,32 +11,20 @@ blogsRouter.post('/',
     (req: Request, res: Response) => {
         const newBlog = blogsRepository.createNewBlog(req.body)
 
-        if (!newBlog) {
-            return res.sendStatus(404)
-        }
-
-        res.status(201).send(newBlog)
+        !newBlog ? res.sendStatus(404) : res.status(201).send(newBlog)
     }
 )
 
 blogsRouter.get('/', (req: Request, res: Response) => {
     const blogs = blogsRepository.giveAllBlog()
 
-    if (!blogs) {
-        return res.sendStatus(404)
-    }
-
-    res.status(200).send(blogs)
+    !blogs ? res.sendStatus(404) : res.status(200).send(blogs)
 })
 
 blogsRouter.get('/:id', (req: Request, res: Response) => {
     const blog = blogsRepository.giveBlogById(req.params.id)
 
-    if (!blog) {
-        return res.sendStatus(404)
-    }
-
-    res.status(200).send(blog)
+    !blog ? res.sendStatus(404) : res.status(200).send(blog)
 })
 
 blogsRouter.put('/:id',
@@ -51,6 +39,11 @@ blogsRouter.put('/:id',
 
         const blog = blogsRepository.giveBlogById(req.params.id)
         res.status(204).send(blog)
+
+        // !isUpdate ? res.sendStatus(404) : (
+        //         const blog = blogsRepository.giveBlogById(req.params.id)
+        //         res.status(204).send(blog)
+        //     )
     }
 )
 
@@ -59,10 +52,6 @@ blogsRouter.delete('/:id',
     (req: Request, res: Response) => {
         const isDeleted = blogsRepository.deleteBlogById(req.params.id)
 
-        if (!isDeleted) {
-            return res.sendStatus(404)
-        }
-
-        res.sendStatus(204)
+        !isDeleted ? res.sendStatus(404) : res.sendStatus(204)
     }
 )

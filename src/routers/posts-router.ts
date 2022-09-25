@@ -11,32 +11,20 @@ postsRouter.post('/',
     (req: Request, res: Response) => {
         const newPost = postsRepository.createNewPost(req.body)
 
-        if (!newPost) {
-            return res.sendStatus(404)
-        }
-
-        res.status(201).send(newPost)
+        !newPost ? res.sendStatus(404) : res.status(201).send(newPost)
     }
 )
 
 postsRouter.get('/', (req: Request, res: Response) => {
     const posts = postsRepository.giveAllPosts()
 
-    if (!posts) {
-        return res.sendStatus(404)
-    }
-
-    res.status(200).send(posts)
+    !posts ? res.sendStatus(404) : res.status(200).send(posts)
 })
 
 postsRouter.get('/:id', (req: Request, res: Response) => {
     const post = postsRepository.givePostById(req.params.id)
 
-    if (!post) {
-        res.sendStatus(404)
-    }
-
-    return res.status(200).send(post)
+    !post ? res.sendStatus(404) : res.status(200).send(post)
 })
 
 postsRouter.put('/:id',
@@ -59,10 +47,6 @@ postsRouter.delete('/:id',
     (req: Request, res: Response) => {
         const isDeleted = postsRepository.deletePostById(req.body.id)
 
-        if (!isDeleted) {
-            return res.sendStatus(404)
-        }
-
-        res.sendStatus(204)
+        !isDeleted ? res.sendStatus(404) : res.sendStatus(204)
     }
 )
