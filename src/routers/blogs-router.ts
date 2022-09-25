@@ -11,6 +11,10 @@ blogsRouter.post('/',
     (req: Request, res: Response) => {
         const newBlog = blogsRepository.createNewBlog(req.body)
 
+        if (!newBlog) {
+            return res.sendStatus(404)
+        }
+
         res.status(201).send(newBlog)
     }
 )
@@ -39,7 +43,7 @@ blogsRouter.put('/:id',
     authenticationGuardMiddleware,
     ...blogRouterValidation,
     (req: Request, res: Response) => {
-        let isUpdate = blogsRepository.updateBlog(req.params.id, req.body.name, req.body.youtubeUrl)
+        const isUpdate = blogsRepository.updateBlog(req.params.id, req.body.name, req.body.youtubeUrl)
 
         if (!isUpdate) {
             return res.sendStatus(404)

@@ -30,33 +30,25 @@ export const blogsRepository = {
     updateBlog(id: string, name: string, youtubeUrl: string) {
         let blog = blogsRepository.giveBlogById(id)
 
-        if (blog) {
-            blog.name = name
-            blog.youtubeUrl = youtubeUrl
-
-            return true
-        } else {
+        if (!blog) {
             return false
         }
+
+        blog.name = name
+        blog.youtubeUrl = youtubeUrl
+
+        return true
     },
 
     deleteBlogById(id: string) {
-        // for (let i = 0, l = blogs.length; i < l; i++) {
-        //     if (blogs[i].id === id) {
-        //         blogs.slice(i, 1)
-        //         return true
-        //     }
-        // }
-        // return false
-
         let blog = blogsRepository.giveBlogById(id)
 
-        if (blog) {
-            blogs = blogs.filter(b => b.id !== id)
-            return true
+        if (!blog) {
+            return false
         }
 
-        return false
+        blogs = blogs.filter(b => b.id !== id)
+        return true
     },
 
     deleteAllBlogs() {
