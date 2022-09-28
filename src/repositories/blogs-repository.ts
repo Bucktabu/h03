@@ -1,60 +1,46 @@
-type blogsType = {
+import {blogsCollection} from "./db";
+
+export type blogType = {
     id: string,
     name: string,
     youtubeUrl: string
-}[]
-let blogs: blogsType = []
+}
+
+export type blogsType = blogType[] // массив данного типа
 
 export const blogsRepository = {
-    createNewBlog(el: any) {
-        const newBlog = {
-            id: String(+(new Date())),
-            name: el.name,
-            youtubeUrl: el.youtubeUrl
+    async createNewBlog(name: string, youtubeUrl: string): Promise<blogType> {
+        const newBlog: blogType = {
+            id: String(+new Date()),
+            name: name,
+            youtubeUrl: youtubeUrl
         }
-        blogs.push(newBlog)
+
+        await blogsCollection.insertOne(newBlog)
 
         return newBlog
     },
 
-    giveAllBlog() {
-        return blogs
-    },
+    async giveBlog(id: string | null | undefined): Promise<blogsType> {
+        const filter: any = {}
 
-    giveBlogById(id: string) {
-        const blog = blogs.find(b => b.id === id)
-
-        return blog
-    },
-
-    updateBlog(id: string, name: string, youtubeUrl: string) {
-        let blog = blogsRepository.giveBlogById(id)
-
-        if (!blog) {
-            return false
+        if (id) {
+            filter.id = {$regex: id}
         }
 
-        blog.name = name
-        blog.youtubeUrl = youtubeUrl
-
-        return true
-
-        // !blog ? false : (
-        //     blog.name = name,
-        //     blog.youtubeUrl = youtubeUrl,
-        //     true
-        // )
+        return blogsCollection.find(filter).toArray()
     },
 
-    deleteBlogById(id: string) {
-        let blog = blogsRepository.giveBlogById(id)
+    async updateBlog(id: string, name: string, youtubeUrl: string): Promise<boolean> {
+        const result = await blogsCollection.updateOne({id: id}, {$set: {name: name, youtubeUrl: youtubeUrl}})
 
-        if (!blog) {
-            return false
-        }
+        return result.matchedCount === 1
+    },
 
-        blogs = blogs.filter(b => b.id !== id)
-        return true
+    async deleteBlogById(id: string): Promise<boolean> {
+        const result = await blogsCollection.deleteOne({id: id})
+
+        return result.deletedCount === 1
 
         // !blog ? false : (
         //     blogs = blogs.filter(b => b.id !== id),
@@ -62,9 +48,9 @@ export const blogsRepository = {
         // )
     },
 
-    deleteAllBlogs() {
-        blogs = []
+    async deleteAllBlogs(): Promise<boolean> {
+        const result = await blogsCollection.drop() // remove()
 
-        return true
+        return result
     }
 }

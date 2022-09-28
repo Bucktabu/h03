@@ -1,7 +1,7 @@
 import {NextFunction, Request, Response} from "express";
 
 
-export const authenticationGuardMiddleware =(req: Request, res: Response, next: NextFunction) => {
+export const authenticationGuardMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const authHeader = req.headers.authorization
 
     const validAuthHeader = 'Basic YWRtaW46cXdlcnR5'
