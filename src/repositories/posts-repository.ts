@@ -1,12 +1,12 @@
 import {blogsCollection, postsCollection} from "./db";
 
 export type postType = {
-    id: string
-    title: string
-    shortDescription: string
-    content: string
-    blogId: string
-    blogName: string
+    id: string,
+    title: string,
+    shortDescription: string,
+    content: string,
+    blogId: string,
+    blogName: string,
     createAt: string
 }
 

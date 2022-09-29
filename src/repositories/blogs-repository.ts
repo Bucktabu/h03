@@ -1,9 +1,9 @@
 import {blogsCollection} from "./db";
 
 export type blogType = {
-    id: string
-    name: string
-    youtubeUrl: string
+    id: string,
+    name: string,
+    youtubeUrl: string,
     createdAt: string
 }
 
