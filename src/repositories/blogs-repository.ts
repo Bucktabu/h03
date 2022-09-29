@@ -1,19 +1,23 @@
 import {blogsCollection} from "./db";
 
 export type blogType = {
-    id: string,
-    name: string,
+    id: string
+    name: string
     youtubeUrl: string
+    createdAt: string
 }
 
 export type blogsType = blogType[] // массив данного типа
+
+const time: number = 10800 // three hours
 
 export const blogsRepository = {
     async createNewBlog(name: string, youtubeUrl: string): Promise<blogType> {
         const newBlog: blogType = {
             id: String(+new Date()),
             name: name,
-            youtubeUrl: youtubeUrl
+            youtubeUrl: youtubeUrl,
+            createdAt: new Date(+new Date() - time).toISOString()
         }
 
         await blogsCollection.insertOne(newBlog)
@@ -41,11 +45,6 @@ export const blogsRepository = {
         const result = await blogsCollection.deleteOne({id: id})
 
         return result.deletedCount === 1
-
-        // !blog ? false : (
-        //     blogs = blogs.filter(b => b.id !== id),
-        //     true
-        // )
     },
 
     async deleteAllBlogs(): Promise<boolean> {

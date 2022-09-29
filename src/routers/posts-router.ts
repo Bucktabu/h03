@@ -11,20 +11,32 @@ postsRouter.post('/',
     async (req: Request, res: Response) => {
         const newPost: postType = await postsRepository.createNewPost(req.body.title, req.body.shortDescription, req.body.content, req.body.blogId)
 
-        !newPost ? res.sendStatus(404) : res.status(201).send(newPost)
+        if (newPost) {
+            res.status(201).send(newPost)
+        } else {
+            res.sendStatus(404)
+        }
     }
 )
 
 postsRouter.get('/', async (req: Request, res: Response) => {
     const posts: postsType = await postsRepository.givePost(null)
 
-    !posts ? res.sendStatus(404) : res.status(200).send(posts)
+    if (posts) {
+        res.status(200).send(posts)
+    } else {
+        res.sendStatus(404)
+    }
 })
 
 postsRouter.get('/:id', async (req: Request, res: Response) => {
     const post: postsType = await postsRepository.givePost(req.params.id)
 
-    !post ? res.sendStatus(404) : res.status(200).send(post)
+    if (post) {
+        res.status(200).send(post)
+    } else {
+        res.sendStatus(404)
+    }
 })
 
 postsRouter.put('/:id',
@@ -33,12 +45,12 @@ postsRouter.put('/:id',
     async (req: Request, res: Response) => {
         const isUpdate = await postsRepository.updatePost(req.params.id, req.body.title, req.body.shortDescription, req.body.content, req.body.blogId)
 
-        if (!isUpdate) {
-            return res.sendStatus(404)
+        if (isUpdate) {
+            const post = postsRepository.givePost(req.params.id)
+            res.status(204).send(post)
+        } else {
+            res.sendStatus(404)
         }
-
-        const post = postsRepository.givePost(req.params.id)
-        res.status(204).send(post)
     }
 )
 
@@ -47,6 +59,10 @@ postsRouter.delete('/:id',
     async (req: Request, res: Response) => {
         const isDeleted = await postsRepository.deletePostById(req.params.id)
 
-        !isDeleted ? res.sendStatus(404) : res.sendStatus(204)
+        if (isDeleted) {
+            res.sendStatus(204)
+        } else {
+            res.sendStatus(404)
+        }
     }
 )

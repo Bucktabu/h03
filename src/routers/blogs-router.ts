@@ -11,20 +11,32 @@ blogsRouter.post('/',
     async (req: Request, res: Response) => {
         const newBlog: blogType = await blogsRepository.createNewBlog(req.body.name, req.body.youtubeUrl)
 
-        !newBlog ? res.sendStatus(404) : res.status(201).send(newBlog)
+        if (newBlog) {
+            res.status(201).send(newBlog)
+        } else {
+            res.sendStatus(404)
+        }
     }
 )
 
 blogsRouter.get('/', async (req: Request, res: Response) => {
     const blogs: blogsType | null | undefined = await blogsRepository.giveBlog(null)
 
-    !blogs ? res.sendStatus(404) : res.status(200).send(blogs)
+    if (blogs) {
+        res.status(200).send(blogs)
+    } else {
+        res.sendStatus(404)
+    }
 })
 
 blogsRouter.get('/:id', async (req: Request, res: Response) => {
     const blog: blogsType | null | undefined = await blogsRepository.giveBlog(req.params.id)
 
-    !blog ? res.sendStatus(404) : res.status(200).send(blog)
+    if (blog) {
+        res.status(200).send(blog)
+    } else {
+        res.sendStatus(404)
+    }
 })
 
 blogsRouter.put('/:id',
@@ -33,17 +45,12 @@ blogsRouter.put('/:id',
     async (req: Request, res: Response) => {
         const isUpdate: boolean = await blogsRepository.updateBlog(req.params.id, req.body.name, req.body.youtubeUrl) // почему здесь не указал булеaн
 
-        if (!isUpdate) {
-            return res.sendStatus(404)
+        if (isUpdate) {
+            const blog = await blogsRepository.giveBlog(req.params.id)
+            res.status(204).send(blog)
+        } else {
+            res.sendStatus(404)
         }
-
-        const blog = await blogsRepository.giveBlog(req.params.id)
-        res.status(204).send(blog)
-
-        // !isUpdate ? res.sendStatus(404) : (
-        //         const blog = blogsRepository.giveBlogById(req.params.id)
-        //         res.status(204).send(blog)
-        //     )
     }
 )
 
@@ -52,6 +59,10 @@ blogsRouter.delete('/:id',
     async (req: Request, res: Response) => {
         const isDeleted: boolean = await blogsRepository.deleteBlogById(req.params.id)
 
-        !isDeleted ? res.sendStatus(404) : res.sendStatus(204)
+        if (isDeleted) {
+            res.sendStatus(204)
+        } else {
+            res.sendStatus(404)
+        }
     }
 )
