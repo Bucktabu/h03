@@ -1,6 +1,8 @@
 import {MongoClient} from 'mongodb'
 import {blogType} from "./blogs-repository";
 import {postType} from "./posts-repository";
+import * as dotenv from "dotenv";
+dotenv.config()
 
 const mongoUri = process.env.mongoURI || 'mongodb://0.0.0.0:27017/?maxPoolSize=20&w=majority';
 
