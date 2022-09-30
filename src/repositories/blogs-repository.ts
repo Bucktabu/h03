@@ -48,8 +48,12 @@ export const blogsRepository = {
     },
 
     async deleteAllBlogs(): Promise<boolean> {
-        const result = await blogsCollection.drop() // remove()
-
-        return result
+        try {
+            await blogsCollection.deleteMany({})
+            return true
+        } catch (e) {
+            console.log('blogsRepo => deleteAllBlogs =>', e)
+            return false
+        }
     }
 }

@@ -6,11 +6,12 @@ import {blogsRepository} from "../repositories/blogs-repository";
 export const testingRouter = Router({})
 
 testingRouter.delete('/all-data', async (req: Request, res: Response) => {
-
-    const postsDeleted = postsRepository.deleteAllPosts()
-    const blogsDeleted = blogsRepository.deleteAllBlogs()
-
-    if (await blogsDeleted && await postsDeleted) {
-        res.sendStatus(204)
+    try {
+        await postsRepository.deleteAllPosts()
+        await blogsRepository.deleteAllBlogs()
+        return res.sendStatus(204)
+    } catch (e) {
+        console.log('testingRouter => all-data =>', e)
+        return res.sendStatus(503)
     }
 })

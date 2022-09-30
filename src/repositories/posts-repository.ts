@@ -54,8 +54,12 @@ export const postsRepository = {
     },
 
     async deleteAllPosts(): Promise<boolean> {
-        const result = await postsCollection.drop()
-
-        return result
+        try {
+            await postsCollection.deleteMany({})
+            return true
+        } catch (e) {
+            console.log('postsRepo => deleteAllPosts =>', e)
+            return false
+        }
     }
 }
