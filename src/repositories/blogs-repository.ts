@@ -9,22 +9,20 @@ export type blogType = {
 
 export type blogsType = blogType[] // массив данного типа
 
-const time: number = 10800 // three hours
-
 export const blogsRepository = {
     async createNewBlog(name: string, youtubeUrl: string): Promise<blogType> {
         const newBlog: blogType = {
             id: String(+new Date()),
             name: name,
             youtubeUrl: youtubeUrl,
-            createdAt: new Date(+new Date() - time).toISOString()
+            createdAt: new Date().toISOString()
         }
 
-        await blogsCollection.insertOne(newBlog)
-
+        await blogsCollection.insertOne({...newBlog})
         return newBlog
     },
 
+    // разнести в два метода, для одного и всех постов
     async giveBlog(id: string | null | undefined): Promise<blogsType> {
         const filter: any = {}
 
@@ -32,7 +30,7 @@ export const blogsRepository = {
             filter.id = {$regex: id}
         }
 
-        return blogsCollection.find(filter).toArray()
+        return blogsCollection.find(filter, {projection: {_id: false}}).toArray()
     },
 
     async updateBlog(id: string, name: string, youtubeUrl: string): Promise<boolean> {
