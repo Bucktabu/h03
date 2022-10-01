@@ -7,7 +7,7 @@ export type postType = {
     content: string,
     blogId: string,
     blogName: string,
-    createAt: string
+    createdAt: string
 }
 
 export type postsType = postType[]
@@ -23,7 +23,7 @@ export const postsRepository = {
             content: content,
             blogId: blogId,
             blogName: 'Simple name', //blogsCollection.find({id: blogId}).name,
-            createAt: new Date().toISOString()
+            createdAt: new Date().toISOString()
         }
 
         await postsCollection.insertOne({...newPost})
