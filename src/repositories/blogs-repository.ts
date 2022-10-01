@@ -37,9 +37,7 @@ export const blogsRepository = {
     },
 
     async giveBlogById (id: string): Promise<blogType | null> {
-        const blog: blogType | null = await blogsCollection.findOne({id: id})
-
-        return blog
+        return await blogsCollection.findOne({id: id})
     },
 
     async updateBlog(id: string, name: string, youtubeUrl: string): Promise<boolean> {

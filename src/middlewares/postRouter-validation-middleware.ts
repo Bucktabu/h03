@@ -8,7 +8,7 @@ const contentValidation = body('content').isString().trim().isLength(({min: 5, m
 
 export const blogIdValidation = body('blogId').isString()
     .custom((id: string) => {
-        const blog = blogsRepository.giveBlog(id)
+        const blog = blogsRepository.giveBlogById(id)
 
         if (!blog) {
             throw new Error('blog not found')
