@@ -20,7 +20,7 @@ postsRouter.post('/',
 )
 
 postsRouter.get('/', async (req: Request, res: Response) => {
-    const posts: postsType = await postsRepository.givePost(null)
+    const posts: postsType = await postsRepository.giveAllPosts()
 
     if (posts) {
         res.status(200).send(posts)
@@ -30,7 +30,7 @@ postsRouter.get('/', async (req: Request, res: Response) => {
 })
 
 postsRouter.get('/:id', async (req: Request, res: Response) => {
-    const post: postsType = await postsRepository.givePost(req.params.id)
+    const post: postType | null = await postsRepository.givePostById(req.params.id)
 
     if (post) {
         res.status(200).send(post)
@@ -46,7 +46,7 @@ postsRouter.put('/:id',
         const isUpdate = await postsRepository.updatePost(req.params.id, req.body.title, req.body.shortDescription, req.body.content, req.body.blogId)
 
         if (isUpdate) {
-            const post = postsRepository.givePost(req.params.id)
+            const post = postsRepository.givePostById(req.params.id)
             res.status(204).send(post)
         } else {
             res.sendStatus(404)

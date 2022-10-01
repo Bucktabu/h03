@@ -20,7 +20,7 @@ blogsRouter.post('/',
 )
 
 blogsRouter.get('/', async (req: Request, res: Response) => {
-    const blogs: blogsType | null | undefined = await blogsRepository.giveBlog(null)
+    const blogs: blogsType = await blogsRepository.giveAllBlogs()
 
     if (blogs) {
         res.status(200).send(blogs)
@@ -30,7 +30,7 @@ blogsRouter.get('/', async (req: Request, res: Response) => {
 })
 
 blogsRouter.get('/:id', async (req: Request, res: Response) => {
-    const blog: blogsType | null | undefined = await blogsRepository.giveBlog(req.params.id)
+    const blog: blogType | null = await blogsRepository.giveBlogById(req.params.id)
 
     if (blog) {
         res.status(200).send(blog)
@@ -46,7 +46,7 @@ blogsRouter.put('/:id',
         const isUpdate: boolean = await blogsRepository.updateBlog(req.params.id, req.body.name, req.body.youtubeUrl) // почему здесь не указал булеaн
 
         if (isUpdate) {
-            const blog = await blogsRepository.giveBlog(req.params.id)
+            const blog = await blogsRepository.giveBlogById(req.params.id)
             res.status(204).send(blog)
         } else {
             res.sendStatus(404)

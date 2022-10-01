@@ -12,8 +12,6 @@ export type postType = {
 
 export type postsType = postType[]
 
-const time: number = 10800
-
 export const postsRepository = {
     async createNewPost(title: string, shortDescription: string, content: string, blogId: string): Promise<postType> {
         const newPost: postType = {
@@ -23,22 +21,30 @@ export const postsRepository = {
             content: content,
             blogId: blogId,
             blogName: 'Simple name', //blogsCollection.find({id: blogId}).name,
-            createAt: new Date(+new Date() - time).toISOString()
+            createAt: new Date().toISOString()
         }
 
-        await postsCollection.insertOne(newPost)
+        await postsCollection.insertOne({...newPost})
 
         return newPost
     },
 
-    async givePost(id: string | null | undefined): Promise<postsType> {
-        const filter: any = {}
+    // async givePost(id: string | null | undefined): Promise<postsType> {
+    //     const filter: any = {}
+    //
+    //     if (id) {
+    //         filter.id = {$regex: id}
+    //     }
+    //
+    //     return postsCollection.find(filter).toArray()
+    // },
 
-        if (id) {
-            filter.id = {$regex: id}
-        }
+    async giveAllPosts() : Promise<postsType> {
+        return await postsCollection.find({}).toArray()
+    },
 
-        return postsCollection.find(filter).toArray()
+    async givePostById(id: string): Promise<postType | null> {
+       return await postsCollection.findOne({id:id})
     },
 
     async updatePost(id: string, title: string, shortDescription: string, content: string, blogId: string): Promise<boolean> {
@@ -58,7 +64,7 @@ export const postsRepository = {
             await postsCollection.deleteMany({})
             return true
         } catch (e) {
-            console.log('postsRepo => deleteAllPosts =>', e)
+            console.log('postsCollection => deleteAllPosts =>', e)
             return false
         }
     }

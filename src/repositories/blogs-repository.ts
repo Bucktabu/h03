@@ -22,15 +22,24 @@ export const blogsRepository = {
         return newBlog
     },
 
-    // разнести в два метода, для одного и всех постов
-    async giveBlog(id: string | null | undefined): Promise<blogsType> {
-        const filter: any = {}
+    // async giveBlog(id: string | null | undefined): Promise<blogsType> {
+    //     const filter: any = {}
+    //
+    //     if (id) {
+    //         filter.id = {$regex: id}
+    //     }
+    //
+    //     return blogsCollection.find(filter, {projection: {_id: false}}).toArray()
+    // },
 
-        if (id) {
-            filter.id = {$regex: id}
-        }
+    async giveAllBlogs(): Promise<blogsType> {
+        return blogsCollection.find({}).toArray()
+    },
 
-        return blogsCollection.find(filter, {projection: {_id: false}}).toArray()
+    async giveBlogById (id: string): Promise<blogType | null> {
+        const blog: blogType | null = await blogsCollection.findOne({id: id})
+
+        return blog
     },
 
     async updateBlog(id: string, name: string, youtubeUrl: string): Promise<boolean> {
@@ -50,7 +59,7 @@ export const blogsRepository = {
             await blogsCollection.deleteMany({})
             return true
         } catch (e) {
-            console.log('blogsRepo => deleteAllBlogs =>', e)
+            console.log('blogsCollection => deleteAllBlogs =>', e)
             return false
         }
     }
