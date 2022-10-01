@@ -35,11 +35,11 @@ export const blogsRepository = {
     // },
 
     async giveAllBlogs(): Promise<blogsType> {
-        return blogsCollection.find({project: {_id: 0}}).toArray()
+        return await blogsCollection.find({}, {projection: {_id: false}}).toArray()
     },
 
     async giveBlogById (id: string): Promise<blogType | null> {
-        return await blogsCollection.findOne({id: id})
+        return await blogsCollection.findOne({id: id}, {projection: {_id: false}})
     },
 
     async updateBlog(id: string, name: string, youtubeUrl: string): Promise<boolean> {

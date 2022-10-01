@@ -42,11 +42,11 @@ export const postsRepository = {
     // },
 
     async giveAllPosts() : Promise<postsType> {
-        return await postsCollection.find({project: {_id: 0}}).toArray()
+        return await postsCollection.find({}, {projection: {_id: false}}).toArray()
     },
 
     async givePostById(id: string): Promise<postType | null> {
-       return await postsCollection.findOne({id:id})
+       return await postsCollection.findOne({id:id}, {projection: {_id: false}})
     },
 
     async updatePost(id: string, title: string, shortDescription: string, content: string, blogId: string): Promise<boolean> {
