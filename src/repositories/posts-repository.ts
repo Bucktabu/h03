@@ -12,6 +12,8 @@ export type postType = {
 
 export type postsType = postType[]
 
+const time = 10800
+
 export const postsRepository = {
     async createNewPost(title: string, shortDescription: string, content: string, blogId: string): Promise<postType> {
         const newPost: postType = {
@@ -21,7 +23,7 @@ export const postsRepository = {
             content: content,
             blogId: blogId,
             blogName: 'Simple name', //blogsCollection.find({id: blogId}).name,
-            createAt: new Date().toISOString()
+            createAt: new Date(+new Date() - time).toISOString()
         }
 
         await postsCollection.insertOne({...newPost})
@@ -40,7 +42,7 @@ export const postsRepository = {
     // },
 
     async giveAllPosts() : Promise<postsType> {
-        return await postsCollection.find({}).toArray()
+        return await postsCollection.find({project: {_id: 0}}).toArray()
     },
 
     async givePostById(id: string): Promise<postType | null> {
