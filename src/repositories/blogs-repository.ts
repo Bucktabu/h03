@@ -9,15 +9,13 @@ export type blogType = {
 
 export type blogsType = blogType[] // массив данного типа
 
-const time = 10800
-
 export const blogsRepository = {
     async createNewBlog(name: string, youtubeUrl: string): Promise<blogType> {
         const newBlog: blogType = {
             id: String(+new Date()),
             name: name,
             youtubeUrl: youtubeUrl,
-            createdAt: new Date(+new Date() - time).toISOString()
+            createdAt: new Date().toISOString()
         }
 
         await blogsCollection.insertOne({...newBlog})
