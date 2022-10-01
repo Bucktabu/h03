@@ -7,9 +7,9 @@ const shortDescriptionValidation = body('shortDescription').isString().trim().is
 const contentValidation = body('content').isString().trim().isLength(({min: 5, max: 1000}))
 
 export const blogIdValidation = body('blogId').isString()
-    .custom((id: string) => {
-        const blog = blogsRepository.giveBlogById(id)
-
+    .custom(async (id: string) => {
+        const blog = await blogsRepository.giveBlogById(id)
+        console.log('blog id validation ', blog)
         if (!blog) {
             throw new Error('blog not found')
         }
